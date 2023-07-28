@@ -1,2 +1,3 @@
 streamlit
-shlink
+pandas
+requests
