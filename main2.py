@@ -66,6 +66,14 @@ def main():
             df['Short URL'] = short_urls
 
             st.dataframe(df)
+            csv=df.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                "Press to Download",
+                csv,
+                "file.csv",
+                "text/csv",
+                key='download-csv'
+            )
 
             st.write(f"Total runtime: {total_time:.2f} seconds")
             st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
