@@ -70,7 +70,7 @@ def main():
             st.download_button(
                 "Press to Download",
                 csv,
-                "file.csv",
+                f"finishedFile.csv",
                 "text/csv",
                 key='download-csv'
             )
