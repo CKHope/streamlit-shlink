@@ -5,7 +5,8 @@ import concurrent.futures
 import time
 
 def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6):
-    url = 'https://130592.xyz/rest/v3/short-urls'
+    # url = 'https://130592.xyz/rest/v3/short-urls'
+    url = 'https://250499.xyz/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
         'X-Api-Key': api_key,
