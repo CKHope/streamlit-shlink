@@ -3,6 +3,8 @@ import requests
 import pandas as pd
 import concurrent.futures
 import time
+from config import VALID_DOMAIN
+from domainHelper import generate_full_domains
 
 def shorten_url(api_key, long_url, tags, crawlable, forward_query, domain='',short_code_length=6):
     url = 'https://130592.xyz/rest/v3/short-urls'
@@ -28,10 +30,10 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, domain='',sho
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-def process_urls(api_key, urls, tags_list, crawlable, forward_query, domain, short_code_length):
+def process_urls(api_key, urls, tags_list, crawlable, forward_query, domains, short_code_length):
     start_time = time.time()
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, domain, short_code_length), zip(urls, tags_list)))
+        results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, data[2], short_code_length), zip(urls, tags_list,domains)))
     end_time = time.time()
     total_time = end_time - start_time
     return results, total_time
@@ -43,7 +45,7 @@ def main():
     crawlable = True
     forward_query = True
     short_code_length = 6
-    domain = '130599.xyz'
+    domain = '250499.xyz'
 
     st.markdown("### URL Shortener using CSV")
 
@@ -64,8 +66,9 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
+            domainsList= generate_full_domains(valid_domains=VALID_DOMAIN,prefixLen=1,times=len(df))
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
-            short_urls, total_time = process_urls(api_key, urls, tags_list, crawlable, forward_query, domain, short_code_length)
+            short_urls, total_time = process_urls(api_key, urls, tags_list, crawlable, forward_query, domainsList, short_code_length)
             df['Short URL'] = short_urls
 
             st.dataframe(df)
