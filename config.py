@@ -1,6 +1,5 @@
 # Example usage
 VALID_DOMAIN = [
-    'jiudu.homes',#
     '250499.xyz',#
     '131291.xyz',#
     '051215.xyz',#
