@@ -47,22 +47,22 @@ def main():
     short_code_length = 6
     domain = '200799.xyz'
 
-    st.markdown("### URL Shortener using CSV")
+    st.markdown("### URL Shortener using xlsx")
 
     st.markdown(
         """
-        Please upload a CSV file containing a column named 'Long URL' and 'Tags'. The app will create short URLs
+        Please upload a xlsx file containing a column named 'Long URL' and 'Tags'. The app will create short URLs
         for each long URL in the CSV and display the result as a DataFrame.
         """
     )
 
-    uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
+    uploaded_file = st.file_uploader("Choose a xlsx file", type=["xlsx"])
 
     if uploaded_file is not None:
         try:
-            df = pd.read_csv(uploaded_file)
+            df = pd.read_excel(uploaded_file)
             if 'Long URL' not in df.columns or 'Tags' not in df.columns:
-                st.error("The CSV file must contain columns named 'Long URL' and 'Tags'.")
+                st.error("The xlsx file must contain columns named 'Long URL' and 'Tags'.")
                 return
 
             urls = df['Long URL'].tolist()
