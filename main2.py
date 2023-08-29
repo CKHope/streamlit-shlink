@@ -45,7 +45,7 @@ def main():
     crawlable = True
     forward_query = True
     short_code_length = 6
-    domain = '130592.xyz'
+    domain = '200799.xyz'
 
     st.markdown("### URL Shortener using CSV")
 
