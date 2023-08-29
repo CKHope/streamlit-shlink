@@ -41,28 +41,28 @@ def process_urls(api_key, urls, tags_list, crawlable, forward_query, domains, sh
 def main():
     st.title("URL Shortener")
 
-    api_key = '8d1cbf9a-100f-46b0-b7b7-dbdabd630836'
+    api_key = '9d311376-eb16-44e6-a326-4900d37d58a2'
     crawlable = True
     forward_query = True
     short_code_length = 6
-    domain = '200799.xyz'
+    # domain = '200799.xyz'
 
-    st.markdown("### URL Shortener using xlsx")
+    st.markdown("### URL Shortener using CSV")
 
     st.markdown(
         """
-        Please upload a xlsx file containing a column named 'Long URL' and 'Tags'. The app will create short URLs
+        Please upload a CSV file containing a column named 'Long URL' and 'Tags'. The app will create short URLs
         for each long URL in the CSV and display the result as a DataFrame.
         """
     )
 
-    uploaded_file = st.file_uploader("Choose a xlsx file", type=["xlsx"])
+    uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
 
     if uploaded_file is not None:
         try:
-            df = pd.read_excel(uploaded_file)
+            df = pd.read_csv(uploaded_file)
             if 'Long URL' not in df.columns or 'Tags' not in df.columns:
-                st.error("The xlsx file must contain columns named 'Long URL' and 'Tags'.")
+                st.error("The CSV file must contain columns named 'Long URL' and 'Tags'.")
                 return
 
             urls = df['Long URL'].tolist()
