@@ -65,12 +65,12 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 def main():
     st.title("URL Shortener")
 
-    api_key = '8b9dc5f3-67c1-4994-9992-bfc38f58a0d8'
+    api_key = '4f53fddb-eb10-4a27-9808-5a8f72ac06ed'
     crawlable = False
     forward_query = False
     short_code_length = 
     # domain = '200799.xyz'
-    batch_size=40
+    batch_size=100
 
     st.markdown("### URL Shortener using CSV")
 
