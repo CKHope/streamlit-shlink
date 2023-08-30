@@ -10,7 +10,7 @@ resutlHolder=st.empty()
 
 # Initialization
 if 'df' not in st.session_state:
-    st.session_state.df = pd.DataFrame()
+    st.session_state['df'] = pd.DataFrame()
 
     
 def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain=''):
