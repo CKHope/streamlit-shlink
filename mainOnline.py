@@ -110,15 +110,15 @@ def main():
     uploaded_file=st.empty()
     if df is not None:
         st.dataframe(df)
-        # csv=df.to_csv(index=False).encode('utf-8')
+        csv=df.to_csv(index=False).encode('utf-8')
         df.to_csv('result.csv',encoding='utf-8',index=False)
-        # st.download_button(
-        #     "Press to Download",
-        #     csv,
-        #     f"finishedFile.csv",
-        #     "text/csv",
-        #     key='download-csv'
-        # )
+        st.download_button(
+            "Press to Download",
+            csv,
+            f"finishedFile.csv",
+            "text/csv",
+            key='download-csv'
+        )
         
 if __name__ == "__main__":
     main()
