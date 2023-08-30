@@ -57,6 +57,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
                 )
             )
             total_results.extend(batch_results)
+            print()
             
     end_time = time.time()
     total_time = end_time - start_time
