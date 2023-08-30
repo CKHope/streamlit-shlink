@@ -7,6 +7,11 @@ from config import VALID_DOMAIN_TLCT
 from domainHelper import generate_full_domains,get_domains
 
 resutlHolder=st.empty()
+
+# Initialization
+if 'df' not in st.session_state:
+    st.session_state.df = pd.DataFrame()
+
     
 def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain=''):
     url = 'https://200799.xyz/rest/v3/short-urls'
@@ -101,16 +106,20 @@ def main():
             short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
             df['Short URL'] = short_urls
 
-            st.dataframe(df)
-            csv=df.to_csv(index=False).encode('utf-8')
-            df.to_csv('result.csv',encoding='utf-8',index=False)
-            st.download_button(
-                "Press to Download",
-                csv,
-                f"finishedFile.csv",
-                "text/csv",
-                key='download-csv'
-            )
+            if len(df)>0:
+                st.session_state.df=df
+            
+            
+            # st.dataframe(df)
+            # csv=df.to_csv(index=False).encode('utf-8')
+            # df.to_csv('result.csv',encoding='utf-8',index=False)
+            # st.download_button(
+            #     "Press to Download",
+            #     csv,
+            #     f"finishedFile.csv",
+            #     "text/csv",
+            #     key='download-csv'
+            # )
 
         except Exception as e:
             st.error(f"Error: {e}")
