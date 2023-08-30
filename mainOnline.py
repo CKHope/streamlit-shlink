@@ -101,17 +101,16 @@ def main():
             short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
             df['Short URL'] = short_urls
 
-            if len(df)>0:
-                st.dataframe(df)
-                csv=df.to_csv(index=False).encode('utf-8')
-                df.to_csv('result.csv',encoding='utf-8',index=False)
-                st.download_button(
-                    "Press to Download",
-                    csv,
-                    f"finishedFile.csv",
-                    "text/csv",
-                    key='download-csv'
-                )
+            st.dataframe(df)
+            csv=df.to_csv(index=False).encode('utf-8')
+            df.to_csv('result.csv',encoding='utf-8',index=False)
+            st.download_button(
+                "Press to Download",
+                csv,
+                f"finishedFile.csv",
+                "text/csv",
+                key='download-csv'
+            )
 
         except Exception as e:
             st.error(f"Error: {e}")
