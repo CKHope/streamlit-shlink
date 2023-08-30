@@ -129,7 +129,7 @@ def main():
             
             st.dataframe(df)
             # csv=df.to_csv(index=False).encode('utf-8')
-            # df.to_csv('result.csv',encoding='utf-8',index=False)
+            df.to_csv(f'shlink/result.csv',encoding='utf-8',index=False)
             # st.download_button(
             #     "Press to Download",
             #     csv,
