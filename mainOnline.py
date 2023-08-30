@@ -101,6 +101,17 @@ def main():
             short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
             df['Short URL'] = short_urls
 
+            if len(df)>0:
+                st.dataframe(df)
+                csv=df.to_csv(index=False).encode('utf-8')
+                df.to_csv('result.csv',encoding='utf-8',index=False)
+                st.download_button(
+                    "Press to Download",
+                    csv,
+                    f"finishedFile.csv",
+                    "text/csv",
+                    key='download-csv'
+                )
 
         except Exception as e:
             st.error(f"Error: {e}")
@@ -108,17 +119,6 @@ def main():
         st.write(f"Total runtime: {total_time:.2f} seconds")
         st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
     # uploaded_file=st.empty()
-    if len(df)>0:
-        st.dataframe(df)
-        csv=df.to_csv(index=False).encode('utf-8')
-        df.to_csv('result.csv',encoding='utf-8',index=False)
-        st.download_button(
-            "Press to Download",
-            csv,
-            f"finishedFile.csv",
-            "text/csv",
-            key='download-csv'
-        )
         
 if __name__ == "__main__":
     main()
