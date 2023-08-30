@@ -69,7 +69,7 @@ def main():
     forward_query = False
     short_code_length = 6
     # domain = '200799.xyz'
-    batch_size=10
+    batch_size=40
 
     st.markdown("### URL Shortener using CSV")
 
