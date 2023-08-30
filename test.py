@@ -68,7 +68,7 @@ def main():
     api_key = '4f53fddb-eb10-4a27-9808-5a8f72ac06ed'
     crawlable = False
     forward_query = False
-    short_code_length = 
+    short_code_length = 12
     # domain = '200799.xyz'
     batch_size=100
 
