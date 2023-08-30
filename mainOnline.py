@@ -108,7 +108,7 @@ def main():
         st.write(f"Total runtime: {total_time:.2f} seconds")
         st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
     # uploaded_file=st.empty()
-    if df is not None:
+    if len(df)>0:
         st.dataframe(df)
         csv=df.to_csv(index=False).encode('utf-8')
         df.to_csv('result.csv',encoding='utf-8',index=False)
