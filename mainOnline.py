@@ -6,7 +6,9 @@ import time
 from config import VALID_DOMAIN_TLCT
 from domainHelper import generate_full_domains,get_domains
 
-def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain='',customSlug=''):
+resutlHolder=st.empty()
+    
+def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain=''):
     url = 'https://200799.xyz/rest/v3/short-urls'
     # url = 'https://250499.xyz/rest/v3/short-urls'
     headers = {
@@ -21,26 +23,26 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
         'forwardQuery': forward_query,
         'shortCodeLength': short_code_length,
         'domain': domain,
-        'customSlug': customSlug
     }
 
     response = requests.post(url, headers=headers, json=data)
     
     if response.status_code == 200:
-        st.success(f'{long_url} DONE')
+        print(f'{long_url} DONE')
+        # st.write(f'{long_url} DONE')
         return response.json()['shortUrl']
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains, customSlugs):
+def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains):
     start_time = time.time()
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2], data[3]), zip(urls, tags_list,domains,customSlugs)))
+        results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]), zip(urls, tags_list,domains)))
     end_time = time.time()
     total_time = end_time - start_time
     return results, total_time
 
-def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains, customSlugs,batch_size=10):
+def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,batch_size=10):
     start_time = time.time()
     total_results = []
 
@@ -52,11 +54,13 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
             
             batch_results = list(
                 executor.map(
-                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2], data[3]),
-                    zip(batch_urls, batch_tags, batch_domains,customSlugs)
+                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]),
+                    zip(batch_urls, batch_tags, batch_domains)
                 )
             )
             total_results.extend(batch_results)
+
+            resutlHolder.warning(f'{i+batch_size}/{len(urls)} links DONE ~ {(i+batch_size)/len(urls)}')
             
     end_time = time.time()
     total_time = end_time - start_time
@@ -68,9 +72,9 @@ def main():
     api_key = '8b9dc5f3-67c1-4994-9992-bfc38f58a0d8'
     crawlable = False
     forward_query = False
-    short_code_length = 
+    short_code_length = 9
     # domain = '200799.xyz'
-    batch_size=40
+    batch_size=100
 
     st.markdown("### URL Shortener using CSV")
 
@@ -93,25 +97,28 @@ def main():
             urls = df['Long URL'].tolist()
             domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
-            customSlugList=df['customSlug'].tolist()
-            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, customSlugList, batch_size)
+            # customSlugList=df['customSlug'].tolist()
+            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
             df['Short URL'] = short_urls
 
-            st.dataframe(df)
-            csv=df.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                "Press to Download",
-                csv,
-                f"finishedFile.csv",
-                "text/csv",
-                key='download-csv'
-            )
-
-            st.write(f"Total runtime: {total_time:.2f} seconds")
-            st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
 
         except Exception as e:
             st.error(f"Error: {e}")
-
+        
+        st.write(f"Total runtime: {total_time:.2f} seconds")
+        st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
+    uploaded_file=st.empty()
+    if df is not None:
+        st.dataframe(df)
+        csv=df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            "Press to Download",
+            csv,
+            f"finishedFile.csv",
+            "text/csv",
+            key='download-csv'
+        )
+        
 if __name__ == "__main__":
     main()
+
