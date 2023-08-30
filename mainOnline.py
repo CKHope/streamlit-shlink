@@ -110,7 +110,7 @@ def main():
                 st.session_state.df=df
             
             
-            # st.dataframe(df)
+            st.dataframe(df)
             # csv=df.to_csv(index=False).encode('utf-8')
             # df.to_csv('result.csv',encoding='utf-8',index=False)
             # st.download_button(
