@@ -69,7 +69,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 def main():
     st.title("URL Shortener")
 
-    api_key = '4f53fddb-eb10-4a27-9808-5a8f72ac06ed'
+    api_key = 'cc5e5a39-e8a6-4012-8226-8332eb1677fa'
     crawlable = False
     forward_query = False
     short_code_length = 9
