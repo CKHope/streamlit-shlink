@@ -25,8 +25,9 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
     }
 
     response = requests.post(url, headers=headers, json=data)
-
+    
     if response.status_code == 200:
+        st.success(f'{long_url} DONE')
         return response.json()['shortUrl']
     else:
         return f"Error: {response.status_code} - {response.text}"
