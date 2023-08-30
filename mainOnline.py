@@ -3,8 +3,11 @@ import requests
 import pandas as pd
 import concurrent.futures
 import time
-from config import VALID_DOMAIN_TLCT
-from domainHelper import generate_full_domains,get_domains
+import itertools
+
+# from config import VALID_DOMAIN_TLCT
+# from domainHelper import generate_full_domains,get_domains
+from time import sleep
 
 resutlHolder=st.empty()
 
@@ -24,6 +27,18 @@ VALID_DOMAIN_TLCT = [
     '200869.xyz',#
     '200921.xyz',#
 ]
+
+def get_domains(valid_domains, times):
+    domains = []
+    domain_iterator = itertools.cycle(valid_domains)
+    
+    for _ in range(times):
+        domain = next(domain_iterator)
+        # random_chars = generate_random_string(prefixLen)
+        # full_domain = f"{random_chars}.{domain}"
+        domains.append(domain)
+    
+    return domains
 
 # Initialization
 if 'df' not in st.session_state:
@@ -81,6 +96,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
                 )
             )
             total_results.extend(batch_results)
+            sleep(1)
 
             resutlHolder.warning(f'{i+batch_size}/{len(urls)} links DONE ~ {(i+batch_size)/len(urls)}')
             
