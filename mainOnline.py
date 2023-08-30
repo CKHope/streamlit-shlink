@@ -8,6 +8,23 @@ from domainHelper import generate_full_domains,get_domains
 
 resutlHolder=st.empty()
 
+VALID_DOMAIN_TLCT = [
+    '200088.xyz',#
+    '200089.xyz',#
+    '200219.xyz',#
+    '200288.xyz',#
+    '200384.xyz',#
+    '200473.xyz',#
+    '200491.xyz',#
+    '200506.xyz',#
+    '200588.xyz',#
+    '200613.xyz',#
+    '200688.xyz',#
+    '200793.xyz',#
+    '200869.xyz',#
+    '200921.xyz',#
+]
+
 # Initialization
 if 'df' not in st.session_state:
     st.session_state['df'] = pd.DataFrame()
@@ -74,7 +91,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 def main():
     st.title("URL Shortener")
 
-    api_key = '269eb522-77a8-437e-ba2a-90e52371a5d5'
+    api_key = 'e6930efc-a2bf-43c1-82a7-704675019bcb'
     crawlable = False
     forward_query = False
     short_code_length = 9
