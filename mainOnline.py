@@ -72,12 +72,13 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
         return f"Error: {response.status_code} - {response.text}"
 
 def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains):
-    start_time = time.time()
+    # start_time = time.time()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]), zip(urls, tags_list,domains)))
-    end_time = time.time()
-    total_time = end_time - start_time
-    return results, total_time
+    # end_time = time.time()
+    # total_time = end_time - start_time
+    # return results, total_time
+    return results
 
 def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,batch_size=10):
     start_time = time.time()

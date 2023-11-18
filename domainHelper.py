@@ -29,3 +29,4 @@ def get_domains(valid_domains, times):
         domains.append(domain)
     
     return domains
+    
