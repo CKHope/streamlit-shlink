@@ -141,7 +141,6 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 def main():
     st.title("URL Shortener")
     API_KEY=st.text_input("API Key", key="api_key")
-    # api_key = 'e9c77a73-7681-43e1-8554-b51fc72d9748'
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
         return
