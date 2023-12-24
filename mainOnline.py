@@ -11,21 +11,54 @@ from time import sleep
 
 resutlHolder=st.empty()
 
+#! these domain rest for 1 month
+# VALID_DOMAIN_TLCT = [
+#     '200088.xyz',#
+#     '200089.xyz',#
+#     '200219.xyz',#
+#     '200288.xyz',#
+#     '200384.xyz',#
+#     '200473.xyz',#
+#     '200491.xyz',#
+#     '200506.xyz',#
+#     '200588.xyz',#
+#     '200613.xyz',#
+#     '200688.xyz',#
+#     '200793.xyz',#
+#     '200869.xyz',#
+#     '200921.xyz',#
+# ]
+
 VALID_DOMAIN_TLCT = [
-    '200088.xyz',#
-    '200089.xyz',#
-    '200219.xyz',#
-    '200288.xyz',#
-    '200384.xyz',#
-    '200473.xyz',#
-    '200491.xyz',#
-    '200506.xyz',#
-    '200588.xyz',#
-    '200613.xyz',#
-    '200688.xyz',#
-    '200793.xyz',#
-    '200869.xyz',#
-    '200921.xyz',#
+'6686668.xyz',
+'6888688.xyz',
+'8668866.xyz',
+'8868886.xyz',
+'68888688.xyz',
+'68866688.xyz',
+'66866668.xyz',
+'88688868.xyz',
+'86688668.xyz',
+'68666866.xyz',
+'66866686.xyz',
+'86668666.xyz',
+'68888886.xyz',
+'68868668.xyz',
+'68866886.xyz',
+'200088.xyz',#
+'200089.xyz',#
+'200219.xyz',#
+'200288.xyz',#
+'200384.xyz',#
+'200473.xyz',#
+'200491.xyz',#
+'200506.xyz',#
+'200588.xyz',#
+'200613.xyz',#
+'200688.xyz',#
+'200793.xyz',#
+'200869.xyz',#
+'200921.xyz',#
 ]
 
 def get_domains(valid_domains, times):
@@ -107,8 +140,12 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 
 def main():
     st.title("URL Shortener")
-
-    api_key = 'e9c77a73-7681-43e1-8554-b51fc72d9748'
+    API_KEY=st.text_input("API Key", key="api_key")
+    # api_key = 'e9c77a73-7681-43e1-8554-b51fc72d9748'
+    if not API_KEY:
+        st.warning("Please input your API key to proceed.")
+        return
+    api_key = API_KEY
     crawlable = False
     forward_query = False
     short_code_length = 9
