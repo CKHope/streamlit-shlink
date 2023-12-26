@@ -152,7 +152,8 @@ def main():
     if not MAIN_DOMAIN:
         st.warning("default domain is 200799.xyz")
         mainDomain='200799.xyz'
-    mainDomain=MAIN_DOMAIN
+    else:
+        mainDomain=MAIN_DOMAIN
     api_key = API_KEY
     crawlable = False
     forward_query = False
