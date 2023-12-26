@@ -180,6 +180,7 @@ def main():
 
             urls = df['Long URL'].tolist()
             if MAIN_DOMAIN=='290691.xyz':
+                st.success('prefix i applied')
                 domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
             else:
                 domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
