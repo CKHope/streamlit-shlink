@@ -61,7 +61,7 @@ VALID_DOMAIN_TLCT = [
 # '200921.xyz',#
 ]
 
-def get_domains(valid_domains, times,fixPrefix):
+def get_domains(valid_domains, times,fixPrefix=''):
     domains = []
     domain_iterator = itertools.cycle(valid_domains)
     
@@ -69,7 +69,7 @@ def get_domains(valid_domains, times,fixPrefix):
         domain = next(domain_iterator)
         # random_chars = generate_random_string(prefixLen)
         # full_domain = f"{random_chars}.{domain}"
-        if fixPrefix:
+        if fixPrefix != '':
             domains.append(f'{fixPrefix}.{domain}')
         else:
             domains.append(domain)
