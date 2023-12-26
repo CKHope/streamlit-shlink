@@ -145,6 +145,7 @@ def main():
     st.title("URL Shortener")
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
+    st.warning('TEST')
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
         return
