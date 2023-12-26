@@ -143,6 +143,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 
 def main():
     st.title("URL Shortener")
+    mainDomain='200799.xyz'
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
     st.warning('TEST')
@@ -151,9 +152,9 @@ def main():
         return
     if not MAIN_DOMAIN:
         st.warning("default domain is 200799.xyz")
-        mainDomain='200799.xyz'
     else:
         mainDomain=MAIN_DOMAIN
+        
     api_key = API_KEY
     crawlable = False
     forward_query = False
@@ -180,7 +181,7 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
-            if MAIN_DOMAIN=='290691.xyz':
+            if mainDomain=='290691.xyz':
                 st.success('prefix i applied')
                 domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
             else:
