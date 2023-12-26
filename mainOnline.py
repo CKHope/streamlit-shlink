@@ -182,11 +182,11 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
-            if main_domain=='290691.xyz':
-                st.success('prefix i applied')
-                domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
-            else:
-                domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
+            # if main_domain=='290691.xyz':
+            #     st.success('prefix i applied')
+            #     domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
+            # else:
+            domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
                 
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
             # customSlugList=df['customSlug'].tolist()
