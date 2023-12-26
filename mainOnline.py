@@ -61,7 +61,7 @@ VALID_DOMAIN_TLCT = [
 # '200921.xyz',#
 ]
 
-def get_domains(valid_domains, times):
+def get_domains(valid_domains, times,fixPrefix):
     domains = []
     domain_iterator = itertools.cycle(valid_domains)
     
@@ -69,7 +69,10 @@ def get_domains(valid_domains, times):
         domain = next(domain_iterator)
         # random_chars = generate_random_string(prefixLen)
         # full_domain = f"{random_chars}.{domain}"
-        domains.append(domain)
+        if fixPrefix:
+            domains.append(f'{fixPrefix}.{domain}')
+        else:
+            domains.append(domain)
     
     return domains
 
@@ -78,8 +81,10 @@ if 'df' not in st.session_state:
     st.session_state['df'] = pd.DataFrame()
 
     
-def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain=''):
+def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain='',**kwagrs):
     url = 'https://200799.xyz/rest/v3/short-urls'
+    if kwagrs.mainDomain:
+        url=f'https://{kwagrs.mainDomain}/rest/v3/short-urls'
     # url = 'https://250499.xyz/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
@@ -99,24 +104,22 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
     
     if response.status_code == 200:
         print(f'{long_url} DONE')
-        # st.write(f'{long_url} DONE')
         return response.json()['shortUrl']
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains):
-    # start_time = time.time()
+def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,**kwargs):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]), zip(urls, tags_list,domains)))
-    # end_time = time.time()
-    # total_time = end_time - start_time
-    # return results, total_time
     return results
 
-def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,batch_size=10):
+def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,batch_size=10,**kwargs):
     start_time = time.time()
     total_results = []
 
+    if kwargs.mainDomain:
+        mainDomain=kwargs.mainDomain
+    
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for i in range(0, len(urls), batch_size):
             batch_urls = urls[i:i + batch_size]
@@ -125,7 +128,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
             
             batch_results = list(
                 executor.map(
-                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]),
+                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2],mainDomain=mainDomain),
                     zip(batch_urls, batch_tags, batch_domains)
                 )
             )
@@ -141,9 +144,14 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 def main():
     st.title("URL Shortener")
     API_KEY=st.text_input("API Key", key="api_key")
+    MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
         return
+    if not MAIN_DOMAIN:
+        st.warning("default domain is 200799.xyz")
+        mainDomain='200799.xyz'
+    mainDomain=MAIN_DOMAIN
     api_key = API_KEY
     crawlable = False
     forward_query = False
@@ -170,10 +178,14 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
-            domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
+            if MAIN_DOMAIN=='290691.xyz':
+                domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
+            else:
+                domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df))
+                
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
             # customSlugList=df['customSlug'].tolist()
-            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
+            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size,mainDomain=mainDomain)
             df['Short URL'] = short_urls
 
             if len(df)>0:
