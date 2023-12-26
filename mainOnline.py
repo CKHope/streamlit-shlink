@@ -108,10 +108,10 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,**kwargs):
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]), zip(urls, tags_list,domains)))
-    return results
+# def process_urls(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,**kwargs):
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+#         results = list(executor.map(lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]), zip(urls, tags_list,domains)))
+#     return results
 
 def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domains,batch_size=10,**kwargs):
     start_time = time.time()
@@ -143,7 +143,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 
 def main():
     st.title("URL Shortener")
-    mainDomain='200799.xyz'
+    main_domain='200799.xyz'
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
     st.warning('TEST')
@@ -153,7 +153,7 @@ def main():
     if not MAIN_DOMAIN:
         st.warning("default domain is 200799.xyz")
     else:
-        mainDomain=MAIN_DOMAIN
+        main_domain=MAIN_DOMAIN
         
     api_key = API_KEY
     crawlable = False
@@ -181,7 +181,7 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
-            if mainDomain=='290691.xyz':
+            if main_domain=='290691.xyz':
                 st.success('prefix i applied')
                 domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
             else:
@@ -189,7 +189,7 @@ def main():
                 
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
             # customSlugList=df['customSlug'].tolist()
-            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size,mainDomain=mainDomain)
+            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size,mainDomain=main_domain)
             df['Short URL'] = short_urls
 
             if len(df)>0:
