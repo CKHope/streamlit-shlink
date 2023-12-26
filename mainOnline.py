@@ -83,8 +83,8 @@ if 'df' not in st.session_state:
     
 def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6,domain='',**kwagrs):
     url = 'https://200799.xyz/rest/v3/short-urls'
-    if kwagrs.mainDomain:
-        url=f'https://{kwagrs.mainDomain}/rest/v3/short-urls'
+    # if kwagrs.mainDomain:
+    #     url=f'https://{kwagrs.mainDomain}/rest/v3/short-urls'
     # url = 'https://250499.xyz/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
@@ -117,8 +117,9 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
     start_time = time.time()
     total_results = []
 
-    if kwargs.mainDomain:
-        mainDomain=kwargs.mainDomain
+    # if kwargs.mainDomain:
+    #     mainDomain=kwargs.mainDomain
+    #     print(mainDomain)
     
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for i in range(0, len(urls), batch_size):
@@ -128,7 +129,7 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
             
             batch_results = list(
                 executor.map(
-                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2],mainDomain=mainDomain),
+                    lambda data: shorten_url(api_key, data[0], data[1], crawlable, forward_query, short_code_length,data[2]),
                     zip(batch_urls, batch_tags, batch_domains)
                 )
             )
@@ -143,17 +144,17 @@ def process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, 
 
 def main():
     st.title("URL Shortener")
-    main_domain='200799.xyz'
+    # main_domain='200799.xyz'
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
     st.warning('TEST')
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
         return
-    if not MAIN_DOMAIN:
-        st.warning("default domain is 200799.xyz")
-    else:
-        main_domain=MAIN_DOMAIN
+    # if not MAIN_DOMAIN:
+    #     st.warning("default domain is 200799.xyz")
+    # else:
+    #     main_domain=MAIN_DOMAIN
         
     api_key = API_KEY
     crawlable = False
@@ -189,7 +190,7 @@ def main():
                 
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
             # customSlugList=df['customSlug'].tolist()
-            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size,mainDomain=main_domain)
+            short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size)
             df['Short URL'] = short_urls
 
             if len(df)>0:
@@ -216,4 +217,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-
