@@ -154,6 +154,8 @@ def main():
 
         except Exception as e:
             st.error(f"Error: {e}")
-        
+        st.write(f"Total runtime: {total_time:.2f} seconds")
+        st.write(f"Average time per link: {total_time / len(urls):.4f} seconds")
+
 if __name__ == "__main__":
     main()
