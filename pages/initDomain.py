@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-def shorten_url(api_key, long_url, tag, crawlable, forward_query, slug="0", short_code_length=6, domain='', main_domain='6886889.xyz'):
+def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6, domain='', main_domain='6886889.xyz'):
     url = f'https://{main_domain}/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
@@ -10,11 +10,10 @@ def shorten_url(api_key, long_url, tag, crawlable, forward_query, slug="0", shor
     }
     data = {
         'longUrl': long_url,
-        'tags': [tag],
+        'tags': tags,
         'crawlable': crawlable,
         'forwardQuery': forward_query,
         'shortCodeLength': short_code_length,
-        'slug': slug,
         'domain': domain,
     }
 
@@ -30,12 +29,17 @@ def main():
 
     # Input fields
     api_key = st.text_input("Enter your Shlink API key:")
+    main_domain = st.text_input("Enter the main domain:", value="6886889.xyz")
     long_url = st.text_input("Enter the long URL:")
     domain_text = st.text_area("Enter the list of domains (one domain per line):")
 
+    # Set default values
+    default_tag = "initDomain"
+    default_slug = "0"
+
     if st.button("Shorten URL"):
-        if api_key and long_url and domain_text:
-            tag = "initDomain"
+        if api_key and main_domain and long_url and domain_text:
+            tags = [default_tag]  # Default tag
             crawlable = False  # You can customize this if needed
             forward_query = False  # You can customize this if needed
 
@@ -45,7 +49,7 @@ def main():
             # Process short links for each domain
             short_links = {}
             for domain in domains:
-                short_link = shorten_url(api_key, long_url, tag, crawlable, forward_query, domain=domain)
+                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, domain=domain, main_domain=main_domain)
                 short_links[domain] = short_link
 
             # Display short links
