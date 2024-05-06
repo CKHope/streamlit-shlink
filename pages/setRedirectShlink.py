@@ -1,6 +1,21 @@
 import streamlit as st
 import requests
 
+def get_domains(api_key):
+    url = "https://6886889.xyz/rest/v3/domains"
+    headers = {
+        "accept": "application/json",
+        "X-Api-Key": api_key
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        return response.json()["domains"]["data"]
+    else:
+        st.error(f"Error: {response.status_code}")
+        return None
+
 def update_redirects(api_key, domain, regular_redirect, invalid_redirect):
     url = f"https://{domain}/rest/v3/domains/redirects"
     headers = {
@@ -26,7 +41,13 @@ def main():
     api_key = st.text_input("Enter your API key:")
     regular_redirect = st.text_input("Enter the regular redirect URL:", value="https://6886889.xyz/68")
     invalid_redirect = st.text_input("Enter the invalid redirect URL:", value="https://6886889.xyz/68")
-    domains_text = st.text_area("Paste all domains to update (one domain per line):")
+    
+    # Get domains without redirects
+    domains_without_redirects = st.session_state.get("domains_without_redirects", [])
+
+    # Set default value of textarea with domains without redirects
+    default_value = "\n".join(domains_without_redirects)
+    domains_text = st.text_area("Paste all domains to update (one domain per line):", value=default_value)
 
     if st.button("Update Redirects"):
         if api_key and regular_redirect and invalid_redirect and domains_text:
