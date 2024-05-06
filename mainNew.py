@@ -32,9 +32,12 @@ VALID_DOMAIN_TLCT=[
 ]
 
 def get_sublist_based_on_date(current_date, days_per_cycle, domains_per_cycle):
-    day = current_date.day
-    cycle = (day - 1) // days_per_cycle
-    start_index = cycle * days_per_cycle * domains_per_cycle
+    now=datetime.now()
+    day = int(now.strftime("%d"))
+    total_domains = len(VALID_DOMAIN_TLCT)
+    cycle = ((day - 1) // days_per_cycle) % (total_domains // domains_per_cycle)
+    start_index = cycle * domains_per_cycle
+    print(f"cycle: {cycle}, start_index: {start_index}, end_index: {start_index + domains_per_cycle}")
     return VALID_DOMAIN_TLCT[start_index:start_index + domains_per_cycle]
 
 current_date = datetime.now()
