@@ -154,9 +154,10 @@ def main():
         mainDomain=MAIN_DOMAIN
     if not FIX_PREFIX:
         fixPrefix='i'
-        st.warning("default domain is: i")
+        st.warning(f"default domain is: {fixPrefix}")
     else:
         fixPrefix=FIX_PREFIX
+        st.warning(f"default domain is: {fixPrefix}")
     st.warning(VALID_DOMAIN_TLCT)
         
     api_key = API_KEY
