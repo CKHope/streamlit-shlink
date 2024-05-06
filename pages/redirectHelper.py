@@ -1,54 +1,32 @@
 import streamlit as st
 import requests
 
-def get_shlink_domains(mainDomain,api_token):
-  """
-  This function retrieves the list of used domains from the Shlink.io API.
+def get_domains(api_key):
+    url = "https://6886889.xyz/rest/v3/domains"
+    headers = {
+        "accept": "application/json",
+        "X-Api-Key": api_key
+    }
 
-  Args:
-      api_token (str): Your Shlink.io API access token.
+    response = requests.get(url, headers=headers)
 
-  Returns:
-      list: A list of used domain names if successful, otherwise None.
-  """
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error(f"Error: {response.status_code}")
+        return None
 
-  # Base URL for the API endpoint
-  base_url = f'https://{mainDomain}/rest/v3/domains'
+def main():
+    st.title("Domain Data Viewer")
+    api_key = st.text_input("Enter your API key:")
+    if st.button("Get Domains"):
+        if api_key:
+            domains_data = get_domains(api_key)
+            if domains_data:
+                st.write("Domain Data:")
+                st.write(domains_data)
+        else:
+            st.error("Please enter your API key.")
 
-  # Headers with your access token
-  headers = {"Authorization": f"Bearer {api_token}"}
-
-  try:
-    # Send GET request to list domains
-    response = requests.get(base_url, headers=headers)
-    response.raise_for_status()  # Raise error for non-2xx status codes
-
-    # Parse JSON response
-    data = response.json()
-
-    # Extract list of domains used for short URLs
-    used_domains = [domain["domain"] for domain in data["domains"] if domain["usedForShortUrls"]]
-
-    return used_domains
-
-  except requests.exceptions.RequestException as e:
-    print(f"An error occurred: {e}")
-    return None
-
-st.title("Shlink.io Used Domain Checker")
-
-# Input field for API token
-api_token = st.text_input("Enter your Shlink.io API Token:")
-
-# Submit button
-if st.button("Get Used Domains"):
-  # Call function to retrieve domains
-  used_domains = get_shlink_domains(api_token)
-
-  if used_domains:
-    st.success("**Used Domains:**")
-    for domain in used_domains:
-      st.write(domain)
-  else:
-    st.error("Failed to retrieve domains. Check your API token or try again later.")
-
+if __name__ == "__main__":
+    main()
