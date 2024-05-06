@@ -70,6 +70,7 @@ VALID_DOMAIN_TLCT=sublist
 #     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[5:]
     
 def get_domains(valid_domains, times,fixPrefix='i'):
+    fixPrefix=fixPrefix
     domains = []
     domain_iterator = itertools.cycle(valid_domains)
     
