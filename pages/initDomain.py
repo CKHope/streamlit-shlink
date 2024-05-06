@@ -33,9 +33,9 @@ def main():
     long_url = st.text_input("Enter the long URL:")
     domain_text = st.text_area("Enter the list of domains (one domain per line):")
 
-    # Set default values
-    default_tag = "initDomain"
-    default_slug = "0"
+    # Default tag and slug inputs
+    default_tag = st.text_input("Enter the default tag:", value="initDomain")
+    default_slug = st.text_input("Enter the default slug:", value="0")
 
     if st.button("Shorten URL"):
         if api_key and main_domain and long_url and domain_text:
