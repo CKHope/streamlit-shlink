@@ -35,7 +35,7 @@ def main():
 
     # Default tag and slug inputs
     default_tag = st.text_input("Enter the default tag:", value="initDomain")
-    default_slug = st.text_input("Enter the default slug:", value="0")
+    default_slug = st.text_input("Enter the default slug:", value="000000")
 
     if st.button("Shorten URL"):
         if api_key and main_domain and long_url and domain_text:
