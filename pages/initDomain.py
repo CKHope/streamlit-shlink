@@ -15,7 +15,7 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, slug,short_co
         'forwardQuery': forward_query,
         'shortCodeLength': short_code_length,
         'domain': domain,
-        'slug': slug
+        'customSlug': slug
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -36,7 +36,7 @@ def main():
 
     # Default tag and slug inputs
     default_tag = st.text_input("Enter the default tag:", value="initDomain")
-    default_slug = st.text_input("Enter the default slug:", value=str(686868))
+    default_slug = st.text_input("Enter the default slug:", value=str(000000))
 
     if st.button("Shorten URL"):
         if api_key and main_domain and long_url and domain_text:
