@@ -28,12 +28,13 @@ def main():
     st.title("URL Shortener")
 
     # Input fields
+    api_key = st.text_input("Enter your Shlink API key:")
+    main_domain = st.text_input("Enter the main domain (e.g., 200799.xyz):")
     long_url = st.text_input("Enter the long URL:")
     domain_text = st.text_area("Enter the list of domains (one domain per line):")
 
     if st.button("Shorten URL"):
-        if long_url and domain_text:
-            api_key = "your_api_key"  # Replace with your Shlink API key
+        if api_key and main_domain and long_url and domain_text:
             tags = []  # You can customize this if needed
             crawlable = False  # You can customize this if needed
             forward_query = False  # You can customize this if needed
@@ -44,7 +45,7 @@ def main():
             # Process short links for each domain
             short_links = {}
             for domain in domains:
-                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, domain=domain)
+                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, domain=domain, main_domain=main_domain)
                 short_links[domain] = short_link
 
             # Display short links
