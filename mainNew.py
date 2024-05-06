@@ -153,7 +153,7 @@ def main():
     else:
         mainDomain=MAIN_DOMAIN
     if not FIX_PREFIX:
-        fixPrefix=''
+        fixPrefix='i'
         st.warning("default domain is: i")
     else:
         fixPrefix=FIX_PREFIX
