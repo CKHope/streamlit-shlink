@@ -34,6 +34,8 @@ def main():
                     else:
                         domains_without_redirects.append(domain)
 
+                st.session_state.domains_without_redirects = domains_without_redirects
+
                 st.write("Domains with configured redirects:")
                 st.write(configured_domains)
 
