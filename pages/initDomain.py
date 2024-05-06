@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_length=6, domain='', main_domain='6886889.xyz'):
+def shorten_url(api_key, long_url, tags, crawlable, forward_query, slug,short_code_length=6, domain='', main_domain='6886889.xyz'):
     url = f'https://{main_domain}/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
@@ -15,6 +15,7 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, short_code_le
         'forwardQuery': forward_query,
         'shortCodeLength': short_code_length,
         'domain': domain,
+        'slug': slug
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -49,7 +50,7 @@ def main():
             # Process short links for each domain
             short_links = {}
             for domain in domains:
-                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, domain=domain, main_domain=main_domain)
+                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, slug=default_slug,domain=domain, main_domain=main_domain)
                 short_links[domain] = short_link
 
             # Display short links
