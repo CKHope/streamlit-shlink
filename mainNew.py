@@ -70,7 +70,6 @@ VALID_DOMAIN_TLCT=sublist
 #     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[5:]
     
 def get_domains(valid_domains, times,fixPrefix='i'):
-    fixPrefix=fixPrefix
     domains = []
     domain_iterator = itertools.cycle(valid_domains)
     
@@ -154,6 +153,7 @@ def main():
     else:
         mainDomain=MAIN_DOMAIN
     if not FIX_PREFIX:
+        fixPrefix=''
         st.warning("default domain is: i")
     else:
         fixPrefix=FIX_PREFIX
