@@ -12,27 +12,61 @@ from time import sleep
 
 resutlHolder=st.empty()
 
-#! shlink6
+#! shlink 688699.xyz
 VALID_DOMAIN_TLCT=[
-    "877988.xyz",
-    "866977.xyz",
-    "855966.xyz",
-    "822933.xyz",
-    "766877.xyz",
-    "755866.xyz",
-    "722833.xyz",
-    "655766.xyz",
-    "622733.xyz",
-    "251305.xyz",
+    '6686668.xyz',
+    '6888688.xyz',
+    '8668866.xyz',
+    '8868886.xyz',
+    '68888688.xyz',
+    '68866688.xyz',
+    '66866668.xyz',
+    '88688868.xyz',
+    '86688668.xyz',
+    '68666866.xyz',
+    '66866686.xyz',
+    '86668666.xyz',
+    '68888886.xyz',
+    '68868668.xyz',
+    '68866886.xyz',
 ]
 
-now=datetime.now()
-if int(now.strftime("%d")) % 2==0:
-    VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[:5]
-else:
-    VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[5:]
+def get_sublist_based_on_date(current_date, days_per_cycle, domains_per_cycle):
+    day = current_date.day
+    cycle = (day - 1) // days_per_cycle
+    start_index = cycle * days_per_cycle * domains_per_cycle
+    return VALID_DOMAIN_TLCT[start_index:start_index + domains_per_cycle]
+
+current_date = datetime.now()
+days_per_cycle = 4
+domains_per_cycle = 5
+sublist = get_sublist_based_on_date(current_date, days_per_cycle, domains_per_cycle)
+print("Sublist for the current date:", sublist)
+
+VALID_DOMAIN_TLCT=sublist
+
+# #! shlink6
+# VALID_DOMAIN_TLCT=[
+#     "877988.xyz",
+#     "866977.xyz",
+#     "855966.xyz",
+#     "822933.xyz",
+#     "766877.xyz",
+#     "755866.xyz",
+#     "722833.xyz",
+#     "655766.xyz",
+#     "622733.xyz",
+#     "251305.xyz",
+# ]
+
+
+# now=datetime.now()
+# if int(now.strftime("%d")) % 2==0:
+#     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[:5]
+# else:
+#     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[5:]
     
-def get_domains(valid_domains, times,fixPrefix=''):
+def get_domains(valid_domains, times,fixPrefix='i'):
     domains = []
     domain_iterator = itertools.cycle(valid_domains)
     
@@ -106,6 +140,7 @@ def main():
     # main_domain='200799.xyz'
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
+    FIX_PREFIX=st.text_input("Prefix", key="prefix")
     st.warning('TEST')
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
@@ -114,6 +149,10 @@ def main():
         st.warning("default domain is 200799.xyz")
     else:
         mainDomain=MAIN_DOMAIN
+    if not FIX_PREFIX:
+        st.warning("default domain is: i")
+    else:
+        fixPrefix=FIX_PREFIX
         
     api_key = API_KEY
     crawlable = False
@@ -140,7 +179,7 @@ def main():
                 return
 
             urls = df['Long URL'].tolist()
-            domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix='i')
+            domainsList= get_domains(valid_domains=VALID_DOMAIN_TLCT,times=len(df),fixPrefix=fixPrefix)
             tags_list = df['Tags'].apply(lambda tags: tags.split(',')).tolist()
             short_urls, total_time = process_urls_in_batches(api_key, urls, tags_list, crawlable, forward_query, short_code_length, domainsList, batch_size,mainDomain=mainDomain)
             df['Short URL'] = short_urls
