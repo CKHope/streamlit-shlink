@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-def get_shlink_domains(api_token):
+def get_shlink_domains(mainDomain,api_token):
   """
   This function retrieves the list of used domains from the Shlink.io API.
 
@@ -13,7 +13,7 @@ def get_shlink_domains(api_token):
   """
 
   # Base URL for the API endpoint
-  base_url = "https://api.shlink.io/v1/domains"
+  base_url = f'https://{mainDomain}/rest/v3/domains'
 
   # Headers with your access token
   headers = {"Authorization": f"Bearer {api_token}"}
