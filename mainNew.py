@@ -14,7 +14,7 @@ resutlHolder=st.empty()
 
 #! shlink 688699.xyz
 VALID_DOMAIN_TLCT=[
-    '6686668.xyz',
+    '6686668.xyz', 
     '6888688.xyz',
     '8668866.xyz',
     '8868886.xyz',
