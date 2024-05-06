@@ -143,7 +143,7 @@ def main():
     # main_domain='200799.xyz'
     API_KEY=st.text_input("API Key", key="api_key")
     MAIN_DOMAIN=st.text_input("Main Domain", key="main_domain")
-    FIX_PREFIX=st.text_input("Prefix", key="prefix")
+    FIX_PREFIX=st.text_input("Prefix", value='i',key="prefix")
     st.warning('TEST')
     if not API_KEY:
         st.warning("Please input your API key to proceed.")
