@@ -1,7 +1,8 @@
 import streamlit as st
-import requests
+import asyncio
+import aiohttp
 
-def shorten_url(api_key, long_url, tags, crawlable, forward_query, slug,short_code_length=6, domain='', main_domain='6886889.xyz'):
+async def shorten_url(session, api_key, long_url, tags, crawlable, forward_query, slug, short_code_length=6, domain='', main_domain='6886889.xyz'):
     url = f'https://{main_domain}/rest/v3/short-urls'
     headers = {
         'accept': 'application/json',
@@ -18,14 +19,14 @@ def shorten_url(api_key, long_url, tags, crawlable, forward_query, slug,short_co
         'customSlug': slug
     }
 
-    response = requests.post(url, headers=headers, json=data)
-    
-    if response.status_code == 200:
-        return response.json()['shortUrl']
-    else:
-        return f"Error: {response.status_code} - {response.text}"
+    async with session.post(url, headers=headers, json=data) as response:
+        if response.status == 200:
+            result = await response.json()
+            return result['shortUrl']
+        else:
+            return f"Error: {response.status} - {await response.text()}"
 
-def main():
+async def main():
     st.title("URL Shortener")
 
     # Input fields
@@ -47,17 +48,17 @@ def main():
             # Split domain text area by lines and remove empty lines
             domains = [domain.strip() for domain in domain_text.split("\n") if domain.strip()]
 
-            # Process short links for each domain
-            short_links = {}
-            for domain in domains:
-                short_link = shorten_url(api_key, long_url, tags, crawlable, forward_query, slug=default_slug,domain=domain, main_domain=main_domain)
-                short_links[domain] = short_link
+            # Create an aiohttp session
+            async with aiohttp.ClientSession() as session:
+                # Make asynchronous requests for shortening URLs for each domain
+                tasks = [shorten_url(session, api_key, long_url, tags, crawlable, forward_query, default_slug, domain=domain) for domain in domains]
+                short_links = await asyncio.gather(*tasks)
 
             # Display short links
-            for domain, short_link in short_links.items():
+            for domain, short_link in zip(domains, short_links):
                 st.write(f"Short link for {domain}: {short_link}")
         else:
             st.error("Please fill in all the fields.")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
