@@ -156,6 +156,7 @@ def main():
         st.warning("default domain is: i")
     else:
         fixPrefix=FIX_PREFIX
+    st.warning(VALID_DOMAIN_TLCT)
         
     api_key = API_KEY
     crawlable = False
