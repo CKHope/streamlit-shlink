@@ -191,7 +191,6 @@ def main():
             if len(df)>0:
                 st.session_state.df=df
             
-            
             st.dataframe(df)
             df.to_csv(f'shlink/result.csv',encoding='utf-8',index=False)
 
