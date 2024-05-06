@@ -17,20 +17,24 @@ def update_redirects(api_key, domain, regular_redirect, invalid_redirect):
     response = requests.patch(url, headers=headers, json=payload)
 
     if response.status_code == 200:
-        st.success("Redirects updated successfully.")
+        st.success(f"Redirects for {domain} updated successfully.")
     else:
-        st.error(f"Error: {response.status_code}")
+        st.error(f"Error updating redirects for {domain}: {response.status_code}")
 
 def main():
-    st.title("Redirects Updater")
-    domain = st.text_input("Enter the domain:", value="6886889.xyz")
+    st.title("Bulk Redirects Updater")
     api_key = st.text_input("Enter your API key:")
     regular_redirect = st.text_input("Enter the regular redirect URL:", value="https://6886889.xyz/68")
     invalid_redirect = st.text_input("Enter the invalid redirect URL:", value="https://6886889.xyz/68")
+    domains_text = st.text_area("Paste all domains to update (one domain per line):")
 
     if st.button("Update Redirects"):
-        if api_key and domain and regular_redirect and invalid_redirect:
-            update_redirects(api_key, domain, regular_redirect, invalid_redirect)
+        if api_key and regular_redirect and invalid_redirect and domains_text:
+            domains = domains_text.split("\n")
+            for domain in domains:
+                domain = domain.strip()  # Remove leading/trailing whitespace
+                if domain:
+                    update_redirects(api_key, domain, regular_redirect, invalid_redirect)
         else:
             st.error("Please fill in all the fields.")
 
