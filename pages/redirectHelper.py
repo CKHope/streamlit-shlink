@@ -11,7 +11,7 @@ def get_domains(api_key):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.json()
+        return response.json()["domains"]["data"]
     else:
         st.error(f"Error: {response.status_code}")
         return None
@@ -23,8 +23,23 @@ def main():
         if api_key:
             domains_data = get_domains(api_key)
             if domains_data:
-                st.write("Domain Data:")
-                st.write(domains_data)
+                configured_domains = []
+                domains_without_redirects = []
+
+                for domain_info in domains_data:
+                    domain = domain_info["domain"]
+                    redirects = domain_info["redirects"]
+                    if redirects.get("regular404Redirect") or redirects.get("invalidShortUrlRedirect"):
+                        configured_domains.append(domain)
+                    else:
+                        domains_without_redirects.append(domain)
+
+                st.write("Domains with configured redirects:")
+                st.write(configured_domains)
+
+                st.write("Domains without configured redirects:")
+                st.write(domains_without_redirects)
+
         else:
             st.error("Please enter your API key.")
 
