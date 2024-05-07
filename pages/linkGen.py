@@ -7,12 +7,11 @@ import os
 
 # Constants
 DEFAULT_DOMAINS_FILE = "default_domains.pkl"
-DEFAULT_LINKS_FILE = "imported_links.pkl"
 DEFAULT_MAX_RANDOM_SUBDOMAIN_LENGTH = 8
 DEFAULT_NUM_LINKS = 5
 DEFAULT_STEP = 5
 DEFAULT_UNIQUE_SUBDOMAIN_LENGTH = True
-APP_VERSION = "1.6"
+APP_VERSION = "1.5"
 APP_FEATURES = """
 Features:
 - Import links from an Excel file
@@ -22,7 +21,6 @@ Features:
 - Each link can have a different random subdomain length
 - Display the generated links in a DataFrame
 - Merge the generated links with the source DataFrame
-- Save imported links to a pickle file for future use
 """
 
 def load_default_domains():
@@ -42,24 +40,6 @@ def remove_default_domain(domain):
     if domain in default_domains:
         default_domains.remove(domain)
         save_default_domains(default_domains)
-
-def save_imported_links(links):
-    with open(DEFAULT_LINKS_FILE, "wb") as file:
-        pickle.dump(links, file)
-
-def load_imported_links():
-    try:
-        with open(DEFAULT_LINKS_FILE, "rb") as file:
-            links = pickle.load(file)
-    except FileNotFoundError:
-        links = []
-    return links
-
-def remove_imported_links():
-    try:
-        os.remove(DEFAULT_LINKS_FILE)
-    except FileNotFoundError:
-        pass
 
 def extract_links_from_excel(file_path, column_name):
     df = pd.read_excel(file_path)
@@ -128,9 +108,6 @@ def main():
         # Extract links from selected column
         links = df[link_column].tolist()
 
-        # Save imported links to pickle
-        save_imported_links(links)
-
         # Display the extracted links
         if links:
             st.write("Imported Links:")
@@ -181,28 +158,15 @@ def main():
             if links and default_domains and num_links:
                 # Generate links for each default domain
                 generated_links = generate_links(links, links, default_domains, num_links, subdomain_length_option, max_random_subdomain_length, unique_subdomain_length)
-                
-                # Create DataFrame for generated links
-                result_df = pd.DataFrame(generated_links, columns=["Generated Link", "Source Link", "Key Index", "Subdomain"])
-                
-                # Merge generated links with source DataFrame
-                result_df = pd.concat([df, result_df], axis=1)
-                
-                # Display the generated links DataFrame
-                st.subheader("Generated Links")
-                st.write(result_df)
+                # Create DataFrame to display generated links
+                result_df = pd.DataFrame({"Generated Links": [x[0] for x in generated_links], "Source Link": [x[1] for x in generated_links], "KeyIndex": [x[2] for x in generated_links], "Subdomain": [x[3] for x in generated_links]})
+                # Merge result_df with the source_df on Source Link
+                merged_df = pd.merge(df, result_df, left_on=link_column, right_on="Source Link")
+                # Output: Display the merged DataFrame
+                st.subheader("Merged DataFrame")
+                st.dataframe(merged_df)
             else:
-                st.error("Please make sure you have imported links and specified default domains.")
-    else:
-        # Load imported links from pickle file if it exists
-        imported_links = load_imported_links()
-        if imported_links:
-            st.subheader("Previously Imported Links")
-            for link in imported_links:
-                st.write(link)
-        else:
-            st.subheader("Imported Links")
-            st.write("No links imported yet.")
+                st.error("Please upload an Excel file, input default domains, and select the number of links to generate.")
 
 if __name__ == "__main__":
     main()
