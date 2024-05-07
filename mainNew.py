@@ -76,13 +76,6 @@ VALID_DOMAIN_TLCT=sublist
 #     "622733.xyz",
 #     "251305.xyz",
 # ]
-
-
-# now=datetime.now()
-# if int(now.strftime("%d")) % 2==0:
-#     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[:5]
-# else:
-#     VALID_DOMAIN_TLCT=VALID_DOMAIN_TLCT[5:]
     
 def get_domains(valid_domains, times,fixPrefix='i'):
     domains = []
