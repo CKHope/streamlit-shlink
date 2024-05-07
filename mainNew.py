@@ -29,6 +29,21 @@ VALID_DOMAIN_TLCT=[
     '68888886.xyz',
     '68868668.xyz',
     '68866886.xyz',
+    "611722.xyz",
+    "711822.xyz",
+    "288399.xyz",
+    "077188.xyz",
+    "022133.xyz",
+    "135679.xyz",
+    "137951.xyz",
+    "753101.xyz",
+    "135937.xyz",
+    "739513.xyz",
+    "135971.xyz",
+    "397513.xyz",
+    "135975.xyz",
+    "579135.xyz",
+    "135319.xyz",
 ]
 
 def get_sublist_based_on_date(current_date, days_per_cycle, domains_per_cycle):
